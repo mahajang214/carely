@@ -30,6 +30,8 @@ export const adminAPI = {
     getMostActiveCities: () => axiosInstance.get("/api/admin/analytics/most-active-cities"),
     getLocationWithCareGiversAndUsers: () => axiosInstance.get("/api/admin/analytics/location-overview"),
     getPlatformRevenue: () => axiosInstance.get("/api/admin/analytics/platform-revenue"),
+    getCombineAPI: () => axiosInstance.get("/api/admin/analytics/combine-api"),
+
 
     // USERS
     // booking history: () => axiosInstance.get(`/api/admin/users`),

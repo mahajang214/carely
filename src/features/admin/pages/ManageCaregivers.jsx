@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { adminAPI } from "../adminAPI";
 import { motion } from "framer-motion";
-import { UserCheck, UserX, Lock, Unlock, Eye } from "lucide-react";
 import { useToast } from "../../../components/ui/ToastProvider.jsx";
+import { LockIcon, Eye, UserCheck, UserX2, KeyRound } from "lucide-react";
 
 function ManageCaregivers() {
   const [caregivers, setCaregivers] = useState([]);
@@ -91,18 +91,25 @@ function ManageCaregivers() {
 
   return (
     <motion.div
-      className="p-6 space-y-6"
+      className="p-4 sm:p-6 space-y-6 min-h-screen bg-gray-50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Filters */}
-      <div className="flex gap-4 mb-4">
+      {/* ===== Header ===== */}
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+        Manage Caregivers
+      </h1>
+
+      {/* ===== Filters ===== */}
+      <div className="flex flex-wrap gap-3">
         {["all", "verified", "unverified", "blocked"].map((f) => (
           <button
             key={f}
-            className={`px-4 py-2 rounded ${
-              filter === f ? "bg-blue-500 text-white" : "bg-gray-200"
+            className={`px-4 py-2 rounded-lg text-sm sm:text-base transition ${
+              filter === f
+                ? "bg-[#003A9E] text-white shadow"
+                : "bg-gray-200 hover:bg-gray-300"
             }`}
             onClick={() => setFilter(f)}
           >
@@ -111,40 +118,40 @@ function ManageCaregivers() {
         ))}
       </div>
 
-      {/* Table */}
+      {/* ===== Content ===== */}
       {loading ? (
-        <div className="text-gray-500 text-center">Loading caregivers...</div>
+        <div className="text-center text-gray-500 py-10">
+          Loading caregivers...
+        </div>
+      ) : caregivers.length === 0 ? (
+        <div className="text-center text-gray-500 py-10">
+          No caregivers found
+        </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse border border-gray-200 text-sm">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border px-2 py-2">#</th>
-                <th className="border px-2 py-2">Profile</th>
-                <th className="border px-2 py-2">Name</th>
-                <th className="border px-2 py-2">Mobile</th> 
-                <th className="border px-2 py-2">City</th>
-                <th className="border px-2 py-2">State</th>
-                <th className="border px-2 py-2">Rating</th>
-                <th className="border px-2 py-2">Status</th>
-                <th className="border px-2 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {caregivers.length === 0 ? (
+        <>
+          {/* ================= DESKTOP TABLE ================= */}
+          <div className="hidden lg:block overflow-x-auto bg-white rounded-xl shadow border">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-100 text-gray-700">
                 <tr>
-                  <td colSpan={9} className="text-center py-4 text-gray-500">
-                    No caregivers found
-                  </td>
+                  <th className="px-4 py-3">#</th>
+                  <th className="px-4 py-3">Profile</th>
+                  <th className="px-4 py-3">Name</th>
+                  <th className="px-4 py-3">Mobile</th>
+                  <th className="px-4 py-3">City</th>
+                  <th className="px-4 py-3">State</th>
+                  <th className="px-4 py-3">Rating</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3 text-center">Actions</th>
                 </tr>
-              ) : (
-                caregivers.map((c, index) => (
+              </thead>
+              <tbody>
+                {caregivers.map((c, index) => (
                   <React.Fragment key={c._id}>
-                    <tr className="hover:bg-gray-50">
-                      <td className="border px-2 py-2 text-center">
-                        {index + 1}
-                      </td>
-                      <td className="border px-2 py-2 text-center">
+                    <tr className="border-t hover:bg-gray-50">
+                      <td className="px-4 py-3 text-center">{index + 1}</td>
+
+                      <td className="px-4 py-3 text-center">
                         {c.profilePicture ? (
                           <img
                             src={c.profilePicture}
@@ -152,105 +159,182 @@ function ManageCaregivers() {
                             className="w-10 h-10 rounded-full mx-auto"
                           />
                         ) : (
-                          <div className="w-10 h-10 bg-gray-300 rounded-full mx-auto"></div>
+                          <div className="w-10 h-10 bg-gray-300 rounded-full mx-auto" />
                         )}
                       </td>
-                      <td className="border px-2 py-2 truncate max-w-xs">
+
+                      <td className="px-4 py-3">
                         {c.firstName} {c.lastName}
                       </td>
-                      <td className="border px-2 py-2 text-center">
+
+                      <td className="px-4 py-3 text-center">
                         {c.mobileNumber || "-"}
                       </td>
-                      {/* Show Mobile */}
-                      <td className="border px-2 py-2 truncate max-w-xs">
-                        {c.address?.city || "-"}
+
+                      <td className="px-4 py-3">{c.address?.city || "-"}</td>
+
+                      <td className="px-4 py-3">{c.address?.state || "-"}</td>
+
+                      <td className="px-4 py-3 text-center">
+                        {c.ratings.average?.toFixed(1) || 0} (
+                        {c.ratings.totalReviews || 0})
                       </td>
-                      <td className="border px-2 py-2 truncate max-w-xs">
-                        {c.address?.state || "-"}
+
+                      <td className="px-4 py-3 text-center">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            c.blocked
+                              ? "bg-red-100 text-red-600"
+                              : c.verified
+                                ? "bg-green-100 text-green-600"
+                                : "bg-yellow-100 text-yellow-600"
+                          }`}
+                        >
+                          {c.blocked
+                            ? "Blocked"
+                            : c.verified
+                              ? "Verified"
+                              : "Unverified"}
+                        </span>
                       </td>
-                      <td className="border px-2 py-2 flex items-center gap-1 justify-center">
-                        {c.ratingAverage?.toFixed(1) || 0} (
-                        {c.totalReviews || 0})
-                      </td>
-                      <td className="border px-2 py-2 text-center">
-                        {c.verified ? "Verified" : "Unverified"} /
-                        {c.blocked ? "Blocked" : "Active"}
-                      </td>
-                      <td className="border px-2 py-2 flex flex-wrap justify-center gap-1">
+
+                      <td className="px-4 py-3 flex flex-wrap gap-2 justify-center">
                         {!c.blocked ? (
                           <button
-                            className="flex items-center gap-1 px-2 py-1 cursor-pointer bg-red-500 hover:bg-red-600 text-white rounded"
+                            className="flex items-center gap-1 px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-xs"
                             onClick={() => handleBlock(c._id)}
                           >
-                            <Lock size={14} /> Block
+                            <LockIcon size={14} /> Block
                           </button>
                         ) : (
                           <button
-                            className="flex items-center gap-1 px-2 py-1 cursor-pointer bg-green-500 hover:bg-green-600 text-white rounded"
+                            className="flex items-center gap-1 px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-xs"
                             onClick={() => handleUnblock(c._id)}
                           >
-                            <Unlock size={14} /> Unblock
+                            <KeyRound size={14} /> Unblock
                           </button>
                         )}
 
-                        {!c.verified && (
+                        {!c.verified && !c.blocked && (
                           <>
                             <button
-                              className="flex items-center gap-1 px-2 py-1 bg-blue-500 text-white rounded"
+                              className="flex items-center gap-1 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded text-xs"
                               onClick={() => handleVerify(c._id)}
                             >
                               <UserCheck size={14} /> Verify
                             </button>
+
                             <button
-                              className="flex items-center gap-1 px-2 py-1 bg-gray-500 text-white rounded"
+                              className="flex items-center gap-1 px-3 py-1 bg-gray-500 hover:bg-gray-600 text-white rounded text-xs"
                               onClick={() => handleReject(c._id)}
                             >
-                              <UserX size={14} /> Reject
-                            </button>
-                            <button
-                              className="flex items-center gap-1 px-2 py-1 bg-indigo-500 text-white rounded"
-                              onClick={() => viewVerificationDocuments(c._id)}
-                            >
-                              <Eye size={14} /> View Documents
+                              <UserX2 size={14} /> Reject
                             </button>
                           </>
                         )}
                       </td>
                     </tr>
-
-                    {/* Verification Documents Row */}
-                    {openDocsId === c._id && (
-                      <tr className="bg-gray-50">
-                        <td colSpan={9} className="p-4">
-                          {c.verificationDocuments?.length > 0 ? (
-                            <ul className="list-disc pl-5 space-y-1">
-                              {c.verificationDocuments.map((doc, i) => (
-                                <li key={i}>
-                                  <a
-                                    href={doc.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-500 underline"
-                                  >
-                                    {doc.name || `Document ${i + 1}`}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="text-gray-500 text-center">
-                              No verification documents uploaded
-                            </p>
-                          )}
-                        </td>
-                      </tr>
-                    )}
                   </React.Fragment>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* ================= MOBILE CARDS ================= */}
+          <div className="lg:hidden space-y-4">
+            {caregivers.map((c, index) => (
+              <div
+                key={c._id}
+                className="bg-white rounded-xl shadow border p-4 space-y-3"
+              >
+                {/* Top */}
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-3">
+                    {c.profilePicture ? (
+                      <img
+                        src={c.profilePicture}
+                        alt="profile"
+                        className="w-12 h-12 rounded-full"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 bg-gray-300 rounded-full" />
+                    )}
+                    <div>
+                      <p className="font-semibold">
+                        {c.firstName} {c.lastName}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {c.address?.city || "-"}, {c.address?.state || "-"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full ${
+                      c.blocked
+                        ? "bg-red-100 text-red-600"
+                        : c.verified
+                          ? "bg-green-100 text-green-600"
+                          : "bg-yellow-100 text-yellow-600"
+                    }`}
+                  >
+                    {c.blocked
+                      ? "Blocked"
+                      : c.verified
+                        ? "Verified"
+                        : "Pending"}
+                  </span>
+                </div>
+
+                {/* Info */}
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p>Mobile: {c.mobileNumber || "-"}</p>
+                  <p>
+                      {c.ratings.average?.toFixed(1) || 0} (
+                        {c.ratings.totalReviews || 0})
+                  </p>
+                </div>
+
+                {/* Actions */}
+                <div className="flex flex-wrap gap-2">
+                  {!c.blocked ? (
+                    <button
+                      className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-red-500 text-white rounded text-sm"
+                      onClick={() => handleBlock(c._id)}
+                    >
+                      <LockIcon size={14} /> Block
+                    </button>
+                  ) : (
+                    <button
+                      className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-green-500 text-white rounded text-sm"
+                      onClick={() => handleUnblock(c._id)}
+                    >
+                      <KeyRound size={14} /> Unblock
+                    </button>
+                  )}
+
+                  {!c.verified && !c.blocked && (
+                    <>
+                      <button
+                        className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-blue-500 text-white rounded text-sm"
+                        onClick={() => handleVerify(c._id)}
+                      >
+                        <UserCheck size={14} /> Verify
+                      </button>
+
+                      <button
+                        className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-gray-500 text-white rounded text-sm"
+                        onClick={() => handleReject(c._id)}
+                      >
+                        <UserX2 size={14} /> Reject
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </motion.div>
   );

@@ -75,42 +75,53 @@ function Broadcast() {
 
   return (
     <motion.div
-      className="p-8 max-w-3xl mx-auto"
+      className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-3xl mx-auto"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <div className="bg-white shadow-xl rounded-2xl p-8 space-y-6 border">
-        <h2 className="text-2xl font-bold text-gray-800">
+      <div className="bg-white shadow-lg sm:shadow-xl rounded-xl sm:rounded-2xl p-5 sm:p-8 space-y-6 border">
+        {/* Header */}
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
           📢 Broadcast Notification
         </h2>
 
-        {/* Audience Selection */}
+        {/* ================= Audience Selection ================= */}
         <div>
-          <label className="block text-sm font-semibold text-gray-600 mb-2">
+          <label
+            htmlFor="audience"
+            className="block text-sm font-semibold text-gray-600 mb-2"
+          >
             Send To
           </label>
+
           <select
+            id="audience"
             name="audience"
             value={form.audience}
             onChange={handleChange}
-            className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+            className="w-full border rounded-lg p-3 text-sm sm:text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           >
+            <option value="all">All</option>
             <option value="users">Users</option>
             <option value="caregivers">Caregivers</option>
-            <option value="all">All</option>
           </select>
         </div>
 
-        {/* Notification Type */}
+        {/* ================= Notification Type ================= */}
         <div>
-          <label className="block text-sm font-semibold text-gray-600 mb-2">
+          <label
+            htmlFor="type"
+            className="block text-sm font-semibold text-gray-600 mb-2"
+          >
             Notification Type
           </label>
+
           <select
+            id="type"
             name="type"
             value={form.type}
             onChange={handleChange}
-            className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+            className="w-full border rounded-lg p-3 text-sm sm:text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           >
             {notificationTypes.map((type) => (
               <option key={type} value={type}>
@@ -120,7 +131,7 @@ function Broadcast() {
           </select>
         </div>
 
-        {/* Title */}
+        {/* ================= Title ================= */}
         <div>
           <label className="block text-sm font-semibold text-gray-600 mb-2">
             Title
@@ -131,11 +142,11 @@ function Broadcast() {
             value={form.title}
             onChange={handleChange}
             placeholder="Enter notification title"
-            className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+            className="w-full border rounded-lg p-3 text-sm sm:text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           />
         </div>
 
-        {/* Message */}
+        {/* ================= Message ================= */}
         <div>
           <label className="block text-sm font-semibold text-gray-600 mb-2">
             Message
@@ -146,18 +157,18 @@ function Broadcast() {
             onChange={handleChange}
             rows="4"
             placeholder="Enter notification message"
-            className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 resize-none"
+            className="w-full border rounded-lg p-3 text-sm sm:text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none resize-none"
           />
         </div>
 
-        {/* Send Button */}
+        {/* ================= Send Button ================= */}
         <button
           onClick={handleSend}
           disabled={loading}
-          className={`w-full py-3 rounded-xl font-semibold text-white transition ${
+          className={`w-full py-3 rounded-xl font-semibold text-sm sm:text-base text-white transition-all duration-200 ${
             loading
               ? "bg-gray-400 cursor-not-allowed"
-              : "bg-indigo-600 hover:bg-indigo-700"
+              : "bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98]"
           }`}
         >
           {loading ? "Sending..." : "Send Broadcast"}

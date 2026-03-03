@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { caregiverAPI } from "../caregiverAPI";
-import { userAPI } from "../../user/userAPI";
 import { commonAPI } from "../../common/commonAPI";
-import { Loader2, User, Bell, CreditCard, Calendar, CheckCircle } from "lucide-react";
+import { Bell, CalendarDays, Loader, User2 } from "lucide-react";
+
 
 function Dashboard() {
   const [profile, setProfile] = useState(null);
@@ -34,7 +34,6 @@ function Dashboard() {
       const notifRes = await commonAPI.getNotifications();
       if (notifRes.data.success)
         setNotifications(notifRes.data.data.slice(0, 5));
-
     } catch (err) {
       console.error("Dashboard error:", err.message);
     } finally {
@@ -49,7 +48,7 @@ function Dashboard() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
-        <Loader2 className="animate-spin w-12 h-12 text-blue-500" />
+        <Loader className="animate-spin w-12 h-12 text-blue-500" />
       </div>
     );
   }
@@ -63,7 +62,7 @@ function Dashboard() {
         className="flex justify-between items-center"
       >
         <h1 className="text-3xl font-bold flex items-center gap-2">
-          <User size={32} /> Welcome, {profile?.firstName || "Caregiver"}
+          <User2 size={32} /> Welcome, {profile?.firstName || "Caregiver"}
         </h1>
         <div className="relative">
           <Bell size={28} />
@@ -91,14 +90,16 @@ function Dashboard() {
         </div>
         <div className="bg-white shadow rounded-xl p-5 flex flex-col">
           <span className="text-gray-500 text-sm">Total Bookings</span>
-          <h2 className="text-2xl font-bold mt-2">{earnings?.totalTransactions || 0}</h2>
+          <h2 className="text-2xl font-bold mt-2">
+            {earnings?.totalTransactions || 0}
+          </h2>
         </div>
       </div>
 
       {/* Recent Bookings */}
       <div>
         <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-          <Calendar /> Recent Bookings
+          <CalendarDays /> Recent Bookings
         </h3>
         {bookings.length === 0 ? (
           <p className="text-gray-500">No recent bookings.</p>
@@ -121,8 +122,8 @@ function Dashboard() {
                     b.bookingStatus === "completed"
                       ? "bg-green-100 text-green-700"
                       : b.bookingStatus === "in-progress"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-gray-100 text-gray-700"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-gray-100 text-gray-700"
                   }`}
                 >
                   {b.bookingStatus.toUpperCase()}

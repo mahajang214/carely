@@ -166,67 +166,63 @@ function Services() {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      {/* HEADER */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Service Management</h1>
+    <div className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8 py-6">
+      {/* ================= HEADER ================= */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold">Service Management</h1>
 
         <motion.button
           whileHover={{ scale: 1.05 }}
           onClick={() => {
-            if (formMode === "") {
-              setFormMode("add");
-            }
-            if (formMode === "add" || formMode === "edit") {
-              setFormMode("");
-            }
+            if (formMode === "") setFormMode("add");
+            else setFormMode("");
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+          className="bg-[#003A9E] text-white px-4 py-2 rounded-lg w-full sm:w-auto"
         >
           + Add Service
         </motion.button>
       </div>
 
-      {/* FORM MODAL */}
+      {/* ================= FORM ================= */}
       <AnimatePresence>
         {(formMode === "add" || selectedService) && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="bg-white p-6 rounded-xl shadow-lg mb-6"
+            className="bg-white p-4 sm:p-6 rounded-xl shadow-lg mb-6"
           >
-            <h2 className="text-lg font-semibold mb-4">
+            <h2 className="text-base sm:text-lg font-semibold mb-4">
               {formMode === "add" ? "Add Service" : "Edit Service"}
             </h2>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input
                 placeholder="Service Name"
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
-                className="border p-2 rounded"
+                className="border p-2 rounded w-full"
               />
+
               <input
                 placeholder="Base Price"
                 value={formData.basePrice}
                 onChange={(e) =>
                   setFormData({ ...formData, basePrice: e.target.value })
                 }
-                className="border p-2 rounded"
+                className="border p-2 rounded w-full"
               />
 
               <select
                 value={formData.categoryName}
-                placeholder="Category Name"
                 onChange={(e) =>
                   setFormData({ ...formData, categoryName: e.target.value })
                 }
-                className="p-2 border rounded"
+                className="p-2 border rounded w-full"
               >
-                <option value="">All Categories</option>
+                <option value="">Select Category</option>
                 {backendCategoryList?.map((cat) => (
                   <option key={cat._id} value={cat.name}>
                     {cat.name}
@@ -243,7 +239,7 @@ function Services() {
                     requiredQualification: e.target.value,
                   })
                 }
-                className="border p-2 rounded"
+                className="border p-2 rounded w-full"
               />
             </div>
 
@@ -254,19 +250,20 @@ function Services() {
                 setFormData({ ...formData, description: e.target.value })
               }
               className="border p-2 rounded mt-4 w-full"
+              rows={4}
             />
 
-            <div className="flex gap-4 mt-4">
+            <div className="flex flex-col sm:flex-row gap-3 mt-4">
               <button
                 onClick={handleSubmit}
-                className="bg-green-600 text-white px-4 py-2 rounded"
+                className="bg-green-600 text-white px-4 py-2 rounded w-full sm:w-auto"
               >
                 {formMode === "add" ? "Create" : "Update"}
               </button>
 
               <button
                 onClick={resetForm}
-                className="bg-gray-400 text-white px-4 py-2 rounded"
+                className="bg-gray-400 text-white px-4 py-2 rounded w-full sm:w-auto"
               >
                 Cancel
               </button>
@@ -275,29 +272,33 @@ function Services() {
         )}
       </AnimatePresence>
 
-      {/* SERVICES LIST */}
-      <div className="grid md:grid-cols-3 gap-6">
+      {/* ================= SERVICES LIST ================= */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {services.map((service) => (
           <motion.div
             key={service._id}
             whileHover={{ y: -5 }}
-            className="bg-white p-4 rounded-xl shadow"
+            className="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition"
           >
-            <h3 className="font-semibold">{service.name}</h3>
-            <p className="text-sm text-gray-500">{service.categoryName}</p>
-            <p className="text-blue-600 font-medium">₹{service.basePrice}</p>
+            <p className="font-semibold text-base sm:text-lg">{service.name}</p>
 
-            <div className="flex gap-2 mt-3">
+            <p className="text-sm text-gray-500">{service.categoryName}</p>
+
+            <p className="text-blue-600 font-medium mt-1">
+              ₹{service.basePrice}
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-2 mt-4">
               <button
                 onClick={() => handleEdit(service._id)}
-                className="text-sm bg-yellow-500 text-white px-3 py-1 rounded"
+                className="text-sm bg-[#523C00] text-white px-3 py-1 rounded w-full sm:w-auto"
               >
                 Edit
               </button>
 
               <button
                 onClick={() => handleDelete(service._id)}
-                className="text-sm bg-red-600 text-white px-3 py-1 rounded"
+                className="text-sm bg-[#8A0000] text-white px-3 py-1 rounded w-full sm:w-auto"
               >
                 Delete
               </button>
@@ -306,15 +307,15 @@ function Services() {
         ))}
       </div>
 
-      {/* PAGINATION */}
+      {/* ================= PAGINATION ================= */}
       {totalPages > 1 && (
-        <div className="flex justify-center mt-10 gap-2">
+        <div className="flex flex-wrap justify-center mt-10 gap-2">
           {[...Array(totalPages)].map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded border ${
-                currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-white"
+              className={`px-3 py-1 rounded border text-sm sm:text-base ${
+                currentPage === i + 1 ? "bg-[#003A9E] text-white" : "bg-white"
               }`}
             >
               {i + 1}

@@ -10,6 +10,15 @@ export const userAPI = {
     // BOOK SERVICE
     bookService: (payload) => axiosInstance.post(`/api/user/services/book`, payload),
 
+    // REVIEWS 
+    addReview: (payload) =>
+        axiosInstance.post("/api/user/reviews", payload),
+    getReviews: (params) =>
+        axiosInstance.get("/api/user/reviews", { params }),
+    updateReview: (payload, id) => axiosInstance.patch(`/api/user/reviews/${id}`, payload),
+    deleteReview: (id) => axiosInstance.delete(`/api/user/reviews/${id}`),
+
+
     // MY BOOKINGS
     getMyBookedAcceptedServicesBooking: () => axiosInstance.get("/api/user/bookings/accepted/services"),
     getMyBookedPendingServicesBooking: () => axiosInstance.get("/api/user/bookings/pending/services"),

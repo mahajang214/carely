@@ -86,6 +86,11 @@ const PaymentHistory = lazy(
   () => import("../features/transaction/pages/PaymentHistory"),
 );
 
+// Patient
+const PatientHome = lazy(
+  () => import("../features/patient/PatientSuccess.jsx"),
+);
+
 // 404
 const NotFound = () => (
   <div className="flex items-center justify-center h-screen text-2xl font-semibold">
@@ -179,6 +184,20 @@ function AppRoutes() {
           <Route path="transactions" element={<AllTransactions />} />
           <Route path="services" element={<AdminServices />} />{" "}
         </Route>
+
+        {/* ==========================
+            Patient Routes
+        ========================== */}
+        <Route
+          path="/patient"
+          element={
+            <PrivateRoute>
+              <RoleGuard allowedRoles={["patient"]}>
+                <PatientHome />
+              </RoleGuard>
+            </PrivateRoute>
+          }
+        ></Route>
 
         {/* ==========================
             Fallback

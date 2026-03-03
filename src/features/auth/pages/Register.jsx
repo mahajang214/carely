@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import { Activity, MapPin, Trash, User } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext.jsx";
 import { authAPI } from "../authAPI";
 import { getCoordinatesFromAddress } from "../../../utils/geocode.js";
@@ -11,6 +10,7 @@ import { Input } from "../../../components/ui/Input.jsx";
 import { Label } from "../../../components/ui/Label.jsx";
 import { useToast } from "../../../components/ui/ToastProvider.jsx";
 import OTPCard from "../../../components/Login/OTPCard.jsx";
+import { ActivityIcon, MapPin, Trash2, User } from "lucide-react";
 const roleRedirects = {
   caregiver: "/caregiver",
   user: "/user",
@@ -296,13 +296,16 @@ const Register = () => {
       firstName,
       lastName,
       bloodGroup,
-      allergies: allergies?.split(",")
+      allergies: allergies
+        ?.split(",")
         .map((a) => a.trim())
         .filter(Boolean),
-      chronicConditions: chronicConditions?.split(",")
+      chronicConditions: chronicConditions
+        ?.split(",")
         .map((a) => a.trim())
         .filter(Boolean),
-      medicalNeeds: medicalNeeds?.split(",")
+      medicalNeeds: medicalNeeds
+        ?.split(",")
         .map((a) => a.trim())
         .filter(Boolean),
       emergencyContact: {
@@ -477,7 +480,7 @@ const Register = () => {
             className="flex justify-center"
           >
             <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur">
-              <Activity size={32} />
+              <ActivityIcon size={32} />
             </div>
           </motion.div>
         </div>
@@ -788,6 +791,8 @@ const Register = () => {
                   )
                 }
               />
+              
+
             </>
           )}
 
@@ -851,6 +856,7 @@ const Register = () => {
                         <img
                           src={user.profilePicture}
                           alt="profile"
+                          loading="eager"
                           onError={() => setImageError(true)}
                           className="w-12 h-12 rounded-full object-cover border"
                         />
@@ -878,6 +884,7 @@ const Register = () => {
                     selectedUser.profilePicture &&
                     !imageError ? (
                       <img
+                        loading="eager"
                         src={
                           selectedUser != null && selectedUser.profilePicture
                         }
@@ -902,7 +909,7 @@ const Register = () => {
                     variant="subDanger"
                     onClick={() => setSelectedUser(null)}
                   >
-                    <Trash size={16} />
+                    <Trash2 size={16} />
                   </Button>
                 </motion.div>
               )}
@@ -920,11 +927,11 @@ const Register = () => {
 
                   {[...Array(totalPages)].map((_, index) => (
                     <button
-                      key={index}
+                      key={_}
                       onClick={() => setCurrentPage(index + 1)}
                       className={`w-8 h-8 rounded-full text-sm font-medium transition ${
                         currentPage === index + 1
-                          ? "bg-blue-600 text-white"
+                          ? "bg-[#003A9E] text-white"
                           : "bg-gray-200 hover:bg-gray-300"
                       }`}
                     >

@@ -1,1 +1,168 @@
 @import "tailwindcss";
+
+/* ================================
+   Fade In Up Animation (Main)
+================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Single fade-in animation */
+.fade-in {
+  opacity: 0;
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* ================================
+   Stagger Animation
+================================ */
+
+.fade-in-stagger > * {
+  opacity: 0;
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* Stagger Delays */
+.fade-in-stagger > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.fade-in-stagger > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.fade-in-stagger > *:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.fade-in-stagger > *:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.fade-in-stagger > *:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.fade-in-stagger > *:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+/* ================================
+   Card Hover Effect
+================================ */
+
+.card-hover {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-slide-up {
+  animation: fadeSlideUp 0.4s ease forwards;
+}
+
+.fade-slide-up-delay {
+  animation: fadeSlideUp 0.4s ease forwards;
+}
+
+/* ================================
+   Modal Pop Animation
+================================ */
+
+@keyframes modalPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(40px);
+  }
+  60% {
+    transform: scale(1.02) translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-pop {
+  animation: modalPop 0.35s ease forwards;
+}
+
+/* ================================
+   Backdrop Fade
+================================ */
+
+@keyframes backdropFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.backdrop-fade {
+  animation: backdropFade 0.25s ease forwards;
+}
+
+/* ================================
+   Slide From Bottom (Booking Card)
+================================ */
+
+@keyframes slideUpStrong {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up-strong {
+  animation: slideUpStrong 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Service Card Animation */
+@keyframes cardFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-fade-up {
+  animation: cardFadeUp 0.4s ease forwards;
+}
+
+.service-card {
+  transition: all 0.25s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import { Activity, MapPin } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext.jsx";
 import { authAPI } from "../authAPI.js";
 import { AnimatePresence, motion } from "framer-motion";
@@ -10,6 +9,7 @@ import { Input } from "../../../components/ui/Input.jsx";
 import { Label } from "../../../components/ui/Label.jsx";
 import { useToast } from "../../../components/ui/ToastProvider.jsx";
 import OTPCard from "../../../components/Login/OTPCard.jsx";
+import { ActivityIcon } from "lucide-react";
 
 const roleRedirects = {
   admin: "/admin",
@@ -55,8 +55,6 @@ const Login = () => {
         token: credentialResponse.credential,
         role,
       };
-
-
 
       const res =
         role === "admin"
@@ -139,7 +137,9 @@ const Login = () => {
     try {
       const res = await authAPI.forgotPassword({ username, password }); // Using forgot password API to validate patient credentials
       login(res.data.token, res.data.user);
-      showToast("Login successful");
+      // console.log("RESPONSE : ", res.data);
+
+      // showToast("Login successful");
     } catch (error) {
       console.log("Error status : ", error.response?.status || "Unknown");
       console.log("Error : ", error.message);
@@ -159,8 +159,8 @@ const Login = () => {
       const res = await authAPI.patientLogin({ username, password });
       const { token, user } = res.data;
       login(token, user);
-      showToast("Login successful");
-      // navigate(roleRedirects[user.role]);
+      // showToast("Login successful");
+      navigate(roleRedirects[user.role]);
     } catch (error) {
       console.log("Error status : ", error.response?.status || "Unknown");
       console.log("Error : ", error.message);
@@ -292,7 +292,7 @@ const Login = () => {
             className="flex justify-center"
           >
             <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur">
-              <Activity size={32} />
+              <ActivityIcon size={32} />
             </div>
           </motion.div>
         </div>

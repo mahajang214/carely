@@ -117,7 +117,7 @@ const OTPCard = ({
         <div className="flex justify-between gap-2 mb-6">
           {otp.map((digit, index) => (
             <input
-              key={index}
+              key={digit}
               type="text"
               value={digit}
               maxLength={1}

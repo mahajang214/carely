@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { adminAPI } from "../adminAPI";
-import { motion } from "framer-motion";
 import { useToast } from "../../../components/ui/ToastProvider";
-import { MapPin, Stethoscope, Users } from "lucide-react";
+import {
+  MapPin,
+  Users,
+  Stethoscope,
+  IndianRupee,
+  Activity,
+} from "lucide-react";
 
 function Dashboard() {
   const { showToast } = useToast();
@@ -29,12 +34,6 @@ function Dashboard() {
       setPlatformRevenue(platformRes.data?.data || null);
       setCities(citiesRes.data?.data || []);
       setLocationOverview(locationRes.data?.data || []);
-      // console.log("==== DASHBOARD API RESPONSE ====");
-      // console.log("Monthly Revenue:", revenueRes.data?.data);
-      // console.log("Platform Revenue:", platformRes.data?.data);
-      // console.log("Most Active Cities:", citiesRes.data?.data);
-      // console.log("Location Overview:", locationRes.data?.data);
-      // console.log("================================");
     } catch (error) {
       console.error(error);
       showToast("Failed to load dashboard data");
@@ -49,59 +48,84 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="p-8 text-center text-gray-500">Loading dashboard...</div>
+      <div className="flex items-center justify-center h-[70vh] text-gray-500 text-lg fade-in">
+        Loading dashboard...
+      </div>
     );
   }
 
-  return (
-    <motion.div
-      className="p-8 space-y-8"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      <h1 className="text-3xl font-bold text-gray-800">📊 Admin Dashboard</h1>
+return (
+  <div className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8 py-6 space-y-8">
 
-      {/* ===== Revenue Summary Cards ===== */}
-      <div className="grid grid-cols-4 gap-6">
-        <div className="bg-white shadow rounded-xl p-6">
-          <h3 className="text-sm text-gray-500">Total Revenue</h3>
-          <p className="text-2xl font-bold text-blue-600">
+    {/* ===== Header ===== */}
+    <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+      Admin Dashboard
+    </h1>
+
+    {/* ===== Revenue Cards ===== */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+
+      {/* Total Revenue */}
+      <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5 sm:p-6 flex items-center justify-between border">
+        <div>
+          <p className="text-sm text-gray-500">Total Revenue</p>
+          <p className="text-xl sm:text-2xl font-bold text-blue-600 break-words">
             {(platformRevenue?.totalRevenue || 0).toLocaleString("en-IN", {
               style: "currency",
               currency: "INR",
             })}
           </p>
         </div>
+        <IndianRupee className="text-blue-500 w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 p-2 rounded-xl" />
+      </div>
 
-        <div className="bg-white shadow rounded-xl p-6">
-          <h3 className="text-sm text-gray-500">Total Transactions</h3>
-          <p className="text-2xl font-bold text-indigo-600">
+      {/* Transactions */}
+      <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5 sm:p-6 flex items-center justify-between border">
+        <div>
+          <p className="text-sm text-gray-500">Total Transactions</p>
+          <p className="text-xl sm:text-2xl font-bold text-indigo-600">
             {platformRevenue?.totalTransactions || 0}
           </p>
         </div>
+        <Activity className="text-indigo-500 w-8 h-8 sm:w-10 sm:h-10 bg-indigo-100 p-2 rounded-xl" />
+      </div>
 
-        <div className="bg-white shadow rounded-xl p-6">
-          <h3 className="text-sm text-gray-500">Total Gross Profit </h3>
-          <p className="text-2xl font-bold text-green-600">
+      {/* Gross Amount */}
+      <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5 sm:p-6 flex items-center justify-between border">
+        <div>
+          <p className="text-sm text-gray-500">Gross Amount</p>
+          <p className="text-xl sm:text-2xl font-bold text-green-600 break-words">
             {(platformRevenue?.grossAmount || 0).toLocaleString("en-IN", {
               style: "currency",
               currency: "INR",
             })}
           </p>
         </div>
+        <IndianRupee className="text-green-500 w-8 h-8 sm:w-10 sm:h-10 bg-green-100 p-2 rounded-xl" />
       </div>
+    </div>
 
-      {/* ===== Monthly Revenue ===== */}
-      <div className="bg-white shadow rounded-xl p-6">
-        <h2 className="text-xl font-semibold mb-4">Monthly Revenue</h2>
+    {/* ===== Bottom Section ===== */}
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+      {/* Monthly Revenue */}
+      <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5 sm:p-6 border">
+        <h2 className="text-base sm:text-lg font-semibold mb-4">
+          Monthly Revenue
+        </h2>
 
         {monthlyRevenue.length === 0 ? (
-          <p className="text-gray-500">No revenue data available</p>
+          <p className="text-gray-500 text-sm">
+            No revenue data available
+          </p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
             {monthlyRevenue.map((item, index) => (
-              <div key={index} className="flex justify-between border-b pb-2">
-                <span>
+              <div
+                key={index}
+                className="flex justify-between items-center bg-gray-50 p-3 rounded-lg text-sm sm:text-base"
+              >
+                <span className="text-gray-600">
                   {item.month} {item.year}
                 </span>
                 <span className="font-semibold text-green-600">
@@ -113,24 +137,29 @@ function Dashboard() {
         )}
       </div>
 
-      {/* ===== Most Active Cities ===== */}
-      <div className="bg-white shadow rounded-xl p-6">
-        <h2 className="text-xl font-semibold mb-4">Most Active Cities</h2>
+      {/* Most Active Cities */}
+      <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5 sm:p-6 border">
+        <h2 className="text-base sm:text-lg font-semibold mb-4">
+          Most Active Cities
+        </h2>
 
         {cities.length === 0 ? (
-          <p className="text-gray-500">No city data available</p>
+          <p className="text-gray-500 text-sm">
+            No city data available
+          </p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {cities.map((city, index) => (
               <div
                 key={index}
-                className="flex justify-between items-center border-b pb-2"
+                className="flex justify-between items-center bg-gray-50 p-3 rounded-lg text-sm sm:text-base"
               >
-                <span className="font-medium text-gray-700">
-                  {city._id || "Unknown City"}
+                <span className="flex items-center gap-2 font-medium text-gray-700">
+                  <MapPin size={16} className="text-gray-400" />
+                  {city._id || "Unknown"}
                 </span>
 
-                <span className="font-semibold text-indigo-600">
+                <span className="text-indigo-600 font-semibold">
                   {city.userCount || 0} Users
                 </span>
               </div>
@@ -139,27 +168,29 @@ function Dashboard() {
         )}
       </div>
 
-      {/* ===== Location Overview ===== */}
-      <div className="bg-white shadow rounded-xl p-6">
-        <h2 className="text-xl font-semibold mb-4">Location Overview</h2>
+      {/* Location Overview */}
+      <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-5 sm:p-6 border md:col-span-2 xl:col-span-1">
+        <h2 className="text-base sm:text-lg font-semibold mb-4">
+          Location Overview
+        </h2>
 
         {locationOverview.length === 0 ? (
-          <p className="text-gray-500">No location data available</p>
+          <p className="text-gray-500 text-sm">
+            No location data available
+          </p>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
             {locationOverview.map((loc, index) => (
               <div
                 key={index}
-                className="flex justify-between items-center border-b pb-3"
+                className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 bg-gray-50 p-3 rounded-lg text-sm sm:text-base"
               >
-                {/* City Name */}
-                <div className="flex items-center gap-2 text-gray-700 font-medium">
-                  <MapPin size={16} className="text-gray-500" />
+                <div className="flex items-center gap-2 font-medium text-gray-700">
+                  <MapPin size={16} className="text-gray-400" />
                   {loc.city || "Unknown"}
                 </div>
 
-                {/* Counts */}
-                <div className="flex items-center gap-6 text-sm font-semibold">
+                <div className="flex items-center gap-4 font-semibold">
                   <div className="flex items-center gap-1 text-blue-600">
                     <Users size={16} />
                     {loc.userCount || 0}
@@ -175,8 +206,10 @@ function Dashboard() {
           </div>
         )}
       </div>
-    </motion.div>
-  );
+
+    </div>
+  </div>
+);
 }
 
 export default Dashboard;

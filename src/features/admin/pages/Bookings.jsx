@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { adminAPI } from "../adminAPI";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye } from "lucide-react";
 import { useToast } from "../../../components/ui/ToastProvider";
+import { EyeIcon } from "lucide-react";
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
@@ -77,19 +77,19 @@ function Bookings() {
 
   return (
     <motion.div
-      className="p-6 space-y-6"
+      className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      {/* Filter Buttons */}
-      <div className="flex gap-3">
+      {/* ================= FILTER BUTTONS ================= */}
+      <div className="flex flex-wrap gap-2 sm:gap-3">
         {["all", "pending", "completed", "rejected"].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded-md font-medium transition ${
+            className={`px-4 py-2 rounded-md text-sm sm:text-base font-medium transition ${
               filter === f
-                ? "bg-blue-600 text-white"
+                ? "bg-[#003A9E] text-white"
                 : "bg-gray-200 hover:bg-gray-300"
             }`}
           >
@@ -98,9 +98,11 @@ function Bookings() {
         ))}
       </div>
 
-      {/* Content */}
+      {/* ================= CONTENT ================= */}
       {loading ? (
-        <div className="text-center text-gray-500">Loading bookings...</div>
+        <div className="text-center text-gray-500 py-10">
+          Loading bookings...
+        </div>
       ) : bookings.length === 0 ? (
         <div className="text-center text-gray-500 py-10">No bookings found</div>
       ) : (
@@ -108,18 +110,19 @@ function Bookings() {
           <motion.div
             key={booking._id}
             layout
-            className="bg-white border rounded-lg shadow"
+            className="bg-white border rounded-xl shadow-sm overflow-hidden"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            {/* Header */}
-            <div className="flex justify-between items-center p-4">
-              <div>
-                <p className="font-semibold text-lg">
+            {/* ================= HEADER ================= */}
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 p-4">
+              <div className="space-y-2">
+                <p className="font-semibold text-base sm:text-lg break-all">
                   #{index + 1} Booking ID: {booking._id}
                 </p>
+
                 <span
-                  className={`text-sm px-3 py-1 rounded-full font-medium ${getStatusColor(
+                  className={`inline-block text-xs sm:text-sm px-3 py-1 rounded-full font-medium ${getStatusColor(
                     booking.bookingStatus ||
                       booking.requestStatus ||
                       booking.serviceStatus,
@@ -134,20 +137,20 @@ function Bookings() {
 
               <button
                 onClick={() => toggleDetails(booking._id)}
-                className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded"
+                className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md text-sm sm:text-base w-full sm:w-auto transition"
               >
-                <Eye size={16} /> Details
+                <EyeIcon size={16} /> Details
               </button>
             </div>
 
-            {/* Details Section */}
+            {/* ================= DETAILS ================= */}
             <AnimatePresence>
               {openId === booking._id && bookingDetails[booking._id] && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="border-t bg-gray-50 p-6 space-y-6"
+                  className="border-t bg-gray-50 p-4 sm:p-6 space-y-6"
                 >
                   {(() => {
                     const details = bookingDetails[booking._id];
@@ -168,8 +171,8 @@ function Bookings() {
 
                     return (
                       <>
-                        {/* ===== Basic Booking Info ===== */}
-                        <div className="grid grid-cols-2 gap-4">
+                        {/* ===== BASIC INFO ===== */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                           {Object.entries(rest).map(([key, value]) => {
                             if (
                               !value ||
@@ -179,20 +182,25 @@ function Bookings() {
                               return null;
 
                             return (
-                              <div key={key}>
-                                <p className="text-sm font-semibold text-gray-500 capitalize">
+                              <div
+                                key={key}
+                                className="bg-white p-3 rounded-lg shadow-sm"
+                              >
+                                <p className="text-xs sm:text-sm font-semibold text-gray-500 capitalize">
                                   {key}
                                 </p>
-                                <p className="text-gray-800">{value}</p>
+                                <p className="text-sm sm:text-base text-gray-800 break-words">
+                                  {value}
+                                </p>
                               </div>
                             );
                           })}
                         </div>
 
-                        {/* ===== Patient Info ===== */}
+                        {/* ===== PATIENT ===== */}
                         {patientId && (
                           <div className="bg-white p-4 rounded-lg shadow-sm">
-                            <h3 className="font-semibold text-lg mb-2 text-indigo-600">
+                            <h3 className="font-semibold text-base sm:text-lg mb-2 text-indigo-600">
                               Patient Information
                             </h3>
                             <p>
@@ -205,10 +213,10 @@ function Bookings() {
                           </div>
                         )}
 
-                        {/* ===== Caregiver Info ===== */}
+                        {/* ===== CAREGIVER ===== */}
                         {caregiverId && (
                           <div className="bg-white p-4 rounded-lg shadow-sm">
-                            <h3 className="font-semibold text-lg mb-2 text-green-600">
+                            <h3 className="font-semibold text-base sm:text-lg mb-2 text-green-600">
                               Caregiver Information
                             </h3>
                             <p>
@@ -224,10 +232,10 @@ function Bookings() {
                           </div>
                         )}
 
-                        {/* ===== User Info (Booking Owner) ===== */}
+                        {/* ===== USER ===== */}
                         {userId && (
                           <div className="bg-white p-4 rounded-lg shadow-sm">
-                            <h3 className="font-semibold text-lg mb-2 text-pink-600">
+                            <h3 className="font-semibold text-base sm:text-lg mb-2 text-pink-600">
                               Booking Created By
                             </h3>
                             <p>
@@ -243,10 +251,10 @@ function Bookings() {
                           </div>
                         )}
 
-                        {/* ===== Service Info ===== */}
+                        {/* ===== SERVICE ===== */}
                         {serviceId && (
                           <div className="bg-white p-4 rounded-lg shadow-sm">
-                            <h3 className="font-semibold text-lg mb-2 text-purple-600">
+                            <h3 className="font-semibold text-base sm:text-lg mb-2 text-purple-600">
                               Service Information
                             </h3>
                             <p>
@@ -260,10 +268,10 @@ function Bookings() {
                           </div>
                         )}
 
-                        {/* ===== Schedule ===== */}
+                        {/* ===== SCHEDULE ===== */}
                         {schedule && (
                           <div className="bg-white p-4 rounded-lg shadow-sm">
-                            <h3 className="font-semibold text-lg mb-2 text-blue-600">
+                            <h3 className="font-semibold text-base sm:text-lg mb-2 text-blue-600">
                               Schedule
                             </h3>
                             <p>
@@ -282,10 +290,10 @@ function Bookings() {
                           </div>
                         )}
 
-                        {/* ===== Duration ===== */}
+                        {/* ===== DURATION ===== */}
                         {duration && (
                           <div className="bg-white p-4 rounded-lg shadow-sm">
-                            <h3 className="font-semibold text-lg mb-2 text-orange-600">
+                            <h3 className="font-semibold text-base sm:text-lg mb-2 text-orange-600">
                               Duration
                             </h3>
                             <p>
@@ -297,15 +305,14 @@ function Bookings() {
                           </div>
                         )}
 
-                        {/* ===== Pricing ===== */}
-
+                        {/* ===== PRICING ===== */}
                         <div className="bg-white p-4 rounded-lg shadow-sm">
-                          <h3 className="font-semibold text-lg mb-2 text-emerald-600">
+                          <h3 className="font-semibold text-base sm:text-lg mb-2 text-emerald-600">
                             Pricing
                           </h3>
                           <p>
                             <strong>Daily Rate:</strong>{" "}
-                            {(pricing.finalPerDay || 0).toLocaleString(
+                            {(pricing?.finalPerDay || 0).toLocaleString(
                               "en-IN",
                               {
                                 style: "currency",

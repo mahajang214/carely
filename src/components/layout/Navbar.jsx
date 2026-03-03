@@ -11,7 +11,7 @@ function Navbar({ title = "Dashboard" }) {
     navigate(-1);
   };
   return (
-    <div className="upper_notification flex justify-between items-center border-b pb-2  ">
+    <div className="upper_notification  justify-between items-center border-b pb-2 hidden md:flex ">
       <h1>{title}</h1>
       <Button
         onClick={handleBack}
@@ -19,7 +19,7 @@ function Navbar({ title = "Dashboard" }) {
         size="sm"
         className={`gap-1`}
       >
-        <ChevronLeft size={20} className="" /> Back
+        <ChevronLeft size={20} /> Back
       </Button>
     </div>
   );

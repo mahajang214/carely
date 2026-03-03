@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { CircleX } from "lucide-react";
 
 export function Toast({ message, onClose, duration = 4000 }) {
   return (
@@ -18,7 +18,7 @@ export function Toast({ message, onClose, duration = 4000 }) {
         onClick={onClose}
         className="bg-red-500 hover:scale-110 transition text-white py-4 w-10 items-center flex justify-center"
       >
-        <X size={18} />
+        <CircleX size={18} />
       </button>
 
       {/* Timeline Bar */}

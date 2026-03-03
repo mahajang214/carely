@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { userAPI } from "../userAPI";
+import { Calendar, Clock, CheckCircle, XCircle, Users } from "lucide-react";
 
 function Dashboard() {
   const [stats, setStats] = useState({
@@ -52,24 +52,11 @@ function Dashboard() {
       });
 
       setLinkedPatients(profileRes.data.data.linkedPatients || []);
-      // console.log("DATA : ", profileRes.data.data.linkedPatients);
     } catch (error) {
       console.error("Dashboard fetch error:", error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: (i) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.4,
-      },
-    }),
   };
 
   if (loading) {
@@ -80,65 +67,86 @@ function Dashboard() {
     );
   }
 
+  const cards = [
+    {
+      title: "Total Bookings",
+      value: stats.total,
+      icon: Calendar,
+      color: "bg-blue-100 text-blue-600",
+    },
+    {
+      title: "Active Bookings",
+      value: stats.active,
+      icon: Clock,
+      color: "bg-yellow-100 text-yellow-600",
+    },
+    {
+      title: "Completed",
+      value: stats.completed,
+      icon: CheckCircle,
+      color: "bg-green-100 text-green-600",
+    },
+    {
+      title: "Cancelled",
+      value: stats.cancelled,
+      icon: XCircle,
+      color: "bg-red-100 text-red-600",
+    },
+  ];
+
   return (
-    <div className="p-6 space-y-10">
+    <div className="p-6 space-y-10 fade-in">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Overview</h1>
         <p className="text-gray-500">Here’s a quick summary of your activity</p>
       </div>
 
-      {/* 📊 Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          { title: "Total Bookings", value: stats.total, color: "bg-blue-500" },
-          {
-            title: "Active Bookings",
-            value: stats.active,
-            color: "bg-yellow-500",
-          },
-          { title: "Completed", value: stats.completed, color: "bg-green-500" },
-          { title: "Cancelled", value: stats.cancelled, color: "bg-red-500" },
-        ].map((card, index) => (
-          <motion.div
-            key={card.title}
-            custom={index}
-            variants={cardVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover={{ scale: 1.05 }}
-            className="rounded-2xl shadow-md p-6 bg-white cursor-pointer"
-          >
-            <div className={`w-12 h-12 rounded-full ${card.color} mb-4`} />
-            <h3 className="text-gray-500 text-sm">{card.title}</h3>
-            <p className="text-2xl font-bold">{card.value}</p>
-          </motion.div>
-        ))}
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 fade-in-stagger">
+        {cards.map((card, index) => {
+          const Icon = card.icon;
+
+          return (
+            <div
+              key={card.title}
+              className="rounded-2xl shadow-sm p-6 bg-white card-hover"
+            >
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${card.color}`}
+              >
+                <Icon size={22} />
+              </div>
+
+              <h3 className="text-gray-500 text-sm">{card.title}</h3>
+
+              <p className="text-2xl font-bold mt-1">{card.value}</p>
+            </div>
+          );
+        })}
       </div>
 
-      {/* 👥 Linked Patients */}
-      <div className="bg-white shadow-md rounded-2xl p-6">
-        <h2 className="text-lg font-semibold mb-4">
+      {/* Linked Patients */}
+      <div className="bg-white shadow-sm rounded-2xl p-6 fade-in">
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Users size={20} />
           Linked Patients ({linkedPatients.length})
         </h2>
 
         {linkedPatients.length === 0 ? (
           <p className="text-gray-500">No linked patients found.</p>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {linkedPatients?.map((patient, index) => (
-              <motion.div
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 fade-in-stagger">
+            {linkedPatients.map((patient) => (
+              <div
                 key={patient._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="border rounded-xl p-4 hover:shadow-md transition "
+                className="border rounded-xl p-4 card-hover bg-gray-50"
               >
-                <p className="font-medium">Name : {patient.patientName}</p>
+                <p className="font-medium">Name: {patient.patientName}</p>
                 <p className="text-sm text-gray-500">
-                  Relation : {patient.relationship}
+                  Relation: {patient.relationship}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}

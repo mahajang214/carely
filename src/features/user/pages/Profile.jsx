@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { userAPI } from "../userAPI";
-import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "../../../components/ui/ToastProvider";
 
 function Profile() {
@@ -98,12 +97,7 @@ function Profile() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-6">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-6xl mx-auto backdrop-blur-xl bg-white/70 shadow-2xl rounded-3xl p-10 border border-white/40"
-      >
+      <div className="max-w-6xl mx-auto backdrop-blur-xl bg-white/70 shadow-2xl rounded-3xl p-10 border border-white/40">
         {/* Header */}
         <div className="flex justify-between items-center mb-10">
           <div>
@@ -113,36 +107,33 @@ function Profile() {
             <p className="text-gray-500 mt-1">{profile.email}</p>
           </div>
 
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.05 }}
+          <button
             onClick={() => setEditing(!editing)}
             className="px-6 py-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
           >
             {editing ? "Cancel" : "Edit Profile"}
-          </motion.button>
+          </button>
         </div>
 
         {/* Profile Card */}
         <div className="grid md:grid-cols-3 gap-10">
           {/* Left Side */}
-          <motion.div
-            whileHover={{ y: -5 }}
-            className="bg-white rounded-2xl p-6 shadow-md text-center"
-          >
+          <div className="bg-white rounded-2xl p-6 shadow-md text-center">
             <img
               src={
                 formData.profilePicture ||
                 "https://ui-avatars.com/api/?name=" + profile.firstName
               }
+              loading="eager"
               alt="profile"
+              referrerPolicy="no-referrer"
               className="w-32 h-32 mx-auto rounded-full object-cover shadow-lg mb-4"
             />
             <p className="text-lg font-semibold">
               {profile.firstName} {profile.lastName}
             </p>
             <p className="text-gray-500">{profile.mobileNumber}</p>
-          </motion.div>
+          </div>
 
           {/* Right Side */}
           <div className="md:col-span-2 space-y-6">
@@ -194,52 +185,40 @@ function Profile() {
           <h3 className="text-3xl font-bold mb-8">Linked Patients</h3>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <AnimatePresence>
-              {linkedPatients.map((patient, index) => (
-                <motion.div
-                  key={patient.patientId?._id || index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  whileHover={{ y: -8 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100"
-                >
-                  <h4 className="text-xl font-semibold mb-2">
-                    {patient.patientName}
-                  </h4>
+            {linkedPatients.map((patient, index) => (
+              <div
+                key={patient.patientId?._id || index}
+                className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100"
+              >
+                <h4 className="text-xl font-semibold mb-2">
+                  {patient.patientName}
+                </h4>
 
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <p>
-                      Relationship:{" "}
-                      <span className="font-medium text-gray-800">
-                        {patient.relationship}
-                      </span>
-                    </p>
-                    <p>Age: {patient.patientId?.age || "N/A"}</p>
-                    <p>Gender: {patient.patientId?.gender || "N/A"}</p>
-                    <p>
-                      Condition: {patient.patientId?.medicalCondition || "N/A"}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                <div className="space-y-1 text-sm text-gray-600">
+                  <p>
+                    Relationship:{" "}
+                    <span className="font-medium text-gray-800">
+                      {patient.relationship}
+                    </span>
+                  </p>
+                  <p>Age: {patient.patientId?.age || "N/A"}</p>
+                  <p>Gender: {patient.patientId?.gender || "N/A"}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {editing && (
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.05 }}
+          <button
             onClick={handleUpdate}
             disabled={saving}
             className="mt-12 px-8 py-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-xl"
           >
             {saving ? "Saving..." : "Save Changes"}
-          </motion.button>
+          </button>
         )}
-      </motion.div>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Wallet, TrendingUp, Percent, Loader2 } from "lucide-react";
 import { caregiverAPI } from "../caregiverAPI";
+import { Loader, PercentIcon, ReceiptIcon, TrendingUp, Wallet2 } from "lucide-react";
 
 function Earnings() {
   const [earnings, setEarnings] = useState({
@@ -42,7 +42,7 @@ function Earnings() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-72">
-        <Loader2 className="animate-spin w-10 h-10 text-blue-500" />
+        <Loader className="animate-spin w-10 h-10 text-blue-500" />
       </div>
     );
   }
@@ -54,7 +54,7 @@ function Earnings() {
         animate={{ opacity: 1, y: 0 }}
         className="text-2xl font-bold mb-6 flex items-center gap-2"
       >
-        <Wallet className="text-green-600" />
+        <Wallet2 className="text-green-600" />
         My Earnings
       </motion.h2>
 
@@ -83,7 +83,7 @@ function Earnings() {
           className="bg-white shadow-md rounded-2xl p-6 border hover:shadow-xl transition"
         >
           <div className="flex items-center gap-3 mb-3">
-            <Percent className="text-red-500" />
+            <PercentIcon className="text-red-500" />
             <h3 className="text-gray-600 font-medium">Platform Commission</h3>
           </div>
 
@@ -100,7 +100,7 @@ function Earnings() {
           className="bg-white shadow-md rounded-2xl p-6 border hover:shadow-xl transition"
         >
           <div className="flex items-center gap-3 mb-3">
-            <Wallet className="text-blue-500" />
+            <ReceiptIcon className="text-blue-500" />
             <h3 className="text-gray-600 font-medium">Total Transactions</h3>
           </div>
 

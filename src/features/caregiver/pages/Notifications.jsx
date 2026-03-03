@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CircleX } from "lucide-react";
 import { Button } from "../../../components/ui";
 import Loader from "../../../components/common/Loader.jsx";
 import { commonAPI } from "../../common/commonAPI.js";
 import { useToast } from "../../../components/ui/ToastProvider.jsx";
 import { caregiverAPI } from "../caregiverAPI.js";
+import { X } from "lucide-react";
 
 const InfoItem = ({ label, value, highlight, capitalize, badge }) => (
   <div>
@@ -193,7 +193,7 @@ function Notifications() {
                   variant="subDanger"
                   onClick={() => setActiveNotification(null)}
                 >
-                  <CircleX /> Close
+                  <X /> Close
                 </Button>
               </div>
 
@@ -271,7 +271,7 @@ function Notifications() {
                         0 ? (
                           serviceInfo.data.requiredQualification.map((q, i) => (
                             <span
-                              key={i}
+                              key={q}
                               className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
                             >
                               {q}

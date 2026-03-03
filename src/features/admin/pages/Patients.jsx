@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { adminAPI } from "../adminAPI";
 import { motion, AnimatePresence } from "framer-motion";
-import { Lock, Unlock, Eye } from "lucide-react";
 import { useToast } from "../../../components/ui/ToastProvider.jsx";
+import { LockKeyhole, EyeIcon, UnlockIcon } from "lucide-react";
 
 function Patients() {
   const [patients, setPatients] = useState([]);
@@ -94,19 +94,24 @@ function Patients() {
 
   return (
     <motion.div
-      className="p-6 space-y-6"
+      className="p-4 sm:p-6 space-y-6 min-h-screen bg-gray-50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Filters */}
-      <div className="flex gap-4 mb-6">
+      {/* ===== Header ===== */}
+      <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+        Manage Patients
+      </h1>
+
+      {/* ===== Filters ===== */}
+      <div className="flex flex-wrap gap-3">
         {["all", "blocked"].map((f) => (
           <button
             key={f}
-            className={`px-5 py-2 rounded-md font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition ${
               filter === f
-                ? "bg-blue-600 text-white"
+                ? "bg-[#003A9E] text-white shadow"
                 : "bg-gray-200 hover:bg-gray-300"
             }`}
             onClick={() => setFilter(f)}
@@ -116,158 +121,157 @@ function Patients() {
         ))}
       </div>
 
+      {/* ===== Content ===== */}
       {loading ? (
-        <div className="text-gray-500 text-center">Loading patients...</div>
+        <div className="text-gray-500 text-center py-10">
+          Loading patients...
+        </div>
+      ) : patients.length === 0 ? (
+        <div className="text-gray-500 text-center py-10">No patients found</div>
       ) : (
         <div className="space-y-4">
-          {patients.length === 0 ? (
-            <div className="text-gray-500 text-center py-10">
-              No patients found
-            </div>
-          ) : (
-            patients.map((p, index) => (
-              <motion.div
-                key={p._id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="bg-white shadow rounded-lg border border-gray-200"
-              >
-                {/* Header */}
-                <div className="flex justify-between items-center p-4 cursor-pointer">
-                  <div>
-                    <p className="font-semibold text-lg">
-                      {index + 1}. {p.firstName} {p.lastName}
-                    </p>
-                    <p
-                      className={`text-sm font-medium ${
-                        p.blocked ? "text-red-500" : "text-green-500"
-                      }`}
-                    >
-                      {p.blocked ? "Blocked" : "Active"}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    {!p.blocked ? (
-                      <button
-                        className="flex items-center gap-1 px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded"
-                        onClick={() => {
-                          console.log("_ID : ", p._id);
-                          return handleBlock(p._id);
-                        }}
-                      >
-                        <Lock size={16} /> Block
-                      </button>
-                    ) : (
-                      <button
-                        className="flex items-center gap-1 px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded"
-                        onClick={() => handleUnblock(p._id)}
-                      >
-                        <Unlock size={16} /> Unblock
-                      </button>
-                    )}
-                    <button
-                      className="flex items-center gap-1 px-3 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded"
-                      onClick={() => toggleDetails(p._id)}
-                    >
-                      <Eye size={16} /> Details
-                    </button>
-                  </div>
+          {patients.map((p, index) => (
+            <motion.div
+              key={p._id}
+              layout
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="bg-white shadow-sm rounded-xl border"
+            >
+              {/* ===== Card Header ===== */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4">
+                <div>
+                  <p className="font-semibold text-base sm:text-lg">
+                    {index + 1}. {p.firstName} {p.lastName}
+                  </p>
+                  <span
+                    className={`inline-block mt-1 text-xs px-2 py-1 rounded-full font-medium ${
+                      p.blocked
+                        ? "bg-red-100 text-red-600"
+                        : "bg-green-100 text-green-600"
+                    }`}
+                  >
+                    {p.blocked ? "Blocked" : "Active"}
+                  </span>
                 </div>
 
-                {/* Details */}
-                <AnimatePresence>
-                  {openDetailsId === p._id && (
-                    <motion.div
-                      key="details"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="border-t border-gray-200 p-4 bg-gray-50 space-y-4"
+                {/* Buttons */}
+                <div className="flex flex-wrap gap-2">
+                  {!p.blocked ? (
+                    <button
+                      className="flex items-center gap-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm"
+                      onClick={() => handleBlock(p._id)}
                     >
-                      {patientDetails[p._id] && (
-                        <>
-                          {/* Address */}
-                          {patientDetails[p._id].address && (
-                            <div>
-                              <p className="font-semibold">Address</p>
-                              <p>
-                                {patientDetails[p._id].address.fullAddress},{" "}
-                                {patientDetails[p._id].address.city},{" "}
-                                {patientDetails[p._id].address.state} -{" "}
-                                {patientDetails[p._id].address.pincode}
-                              </p>
-                            </div>
-                          )}
-
-                          {/* Emergency Contacts */}
-                          {patientDetails[p._id].emergencyContact &&
-                          Object.keys(patientDetails[p._id].emergencyContact)
-                            .length > 0 ? (
-                            <div>
-                              <p className="font-semibold">
-                                Emergency Contacts
-                              </p>
-                              <div className="flex flex-wrap gap-2 mt-1">
-                                {Object.entries(
-                                  patientDetails[p._id].emergencyContact,
-                                ).map(([key, ec], idx) => {
-                                  //   console.log("EC : ", ec, "KEY : ", key);
-                                  return (
-                                    <span
-                                      key={idx}
-                                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-md text-sm font-medium shadow-sm"
-                                    >
-                                      {key.toUpperCase()} : {ec.toUpperCase()}
-                                    </span>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          ) : (
-                            <p>No emergency contacts</p>
-                          )}
-
-                          {/* Other Details */}
-                          <div className="grid grid-cols-2 gap-4">
-                            {Object.entries(patientDetails[p._id]).map(
-                              ([key, value]) => {
-                                if (
-                                  [
-                                    "_id",
-                                    "blocked",
-                                    "profilePicture",
-                                    "address",
-                                    "emergencyContact",
-                                    "_v",
-                                    "__v",
-                                  ].includes(key)
-                                )
-                                  return null;
-
-                                return (
-                                  <div key={key}>
-                                    <p className="font-semibold capitalize">
-                                      {key}
-                                    </p>
-                                    <p className="text-gray-700">
-                                      {renderValue(value)}
-                                    </p>
-                                  </div>
-                                );
-                              },
-                            )}
-                          </div>
-                        </>
-                      )}
-                    </motion.div>
+                      <LockKeyhole size={16} /> Block
+                    </button>
+                  ) : (
+                    <button
+                      className="flex items-center gap-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm"
+                      onClick={() => handleUnblock(p._id)}
+                    >
+                      <UnlockIcon size={16} /> Unblock
+                    </button>
                   )}
-                </AnimatePresence>
-              </motion.div>
-            ))
-          )}
+
+                  <button
+                    className="flex items-center gap-1 px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm"
+                    onClick={() => toggleDetails(p._id)}
+                  >
+                    <EyeIcon size={16} /> Details
+                  </button>
+                </div>
+              </div>
+
+              {/* ===== Expandable Details ===== */}
+              <AnimatePresence>
+                {openDetailsId === p._id && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="border-t bg-gray-50 p-4 space-y-5"
+                  >
+                    {patientDetails[p._id] && (
+                      <>
+                        {/* Address */}
+                        {patientDetails[p._id].address && (
+                          <div>
+                            <p className="font-semibold mb-1">Address</p>
+                            <p className="text-gray-700 text-sm">
+                              {patientDetails[p._id].address.fullAddress},{" "}
+                              {patientDetails[p._id].address.city},{" "}
+                              {patientDetails[p._id].address.state} -{" "}
+                              {patientDetails[p._id].address.pincode}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Emergency Contacts */}
+                        {patientDetails[p._id].emergencyContact &&
+                        Object.keys(patientDetails[p._id].emergencyContact)
+                          .length > 0 ? (
+                          <div>
+                            <p className="font-semibold mb-2">
+                              Emergency Contacts
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {Object.entries(
+                                patientDetails[p._id].emergencyContact,
+                              ).map(([key, ec], idx) => (
+                                <span
+                                  key={idx}
+                                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-md text-xs font-medium"
+                                >
+                                  {key.toUpperCase()} : {ec.toUpperCase()}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-500">
+                            No emergency contacts
+                          </p>
+                        )}
+
+                        {/* Other Details */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {Object.entries(patientDetails[p._id]).map(
+                            ([key, value]) => {
+                              if (
+                                [
+                                  "_id",
+                                  "blocked",
+                                  "profilePicture",
+                                  "address",
+                                  "emergencyContact",
+                                  "_v",
+                                  "__v",
+                                ].includes(key)
+                              )
+                                return null;
+
+                              return (
+                                <div key={key}>
+                                  <p className="font-semibold text-sm capitalize">
+                                    {key}
+                                  </p>
+                                  <p className="text-gray-700 text-sm">
+                                    {renderValue(value)}
+                                  </p>
+                                </div>
+                              );
+                            },
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
         </div>
       )}
     </motion.div>
