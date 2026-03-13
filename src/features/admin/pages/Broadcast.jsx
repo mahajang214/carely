@@ -58,7 +58,7 @@ function Broadcast() {
       }
 
       showToast("Broadcast sent successfully");
-      console.log("RESPONSE : ", res.data);
+      // console.log("RESPONSE : ", res.data);
       setForm({
         title: "",
         message: "",

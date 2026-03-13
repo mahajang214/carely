@@ -618,6 +618,7 @@ const Register = () => {
               </div>
 
               {/* Editable Fields */}
+              
               <div className="grid grid-cols-2 gap-3">
                 <Input
                   placeholder="City"
