@@ -116,7 +116,7 @@ function MyBookings() {
                 </div>
 
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-semibold capitalize w-fit ${getStatusColor(
+                  className={`px-3 py-1 rounded-full text-xs font-semibold capitalize  items-center h-7  ${getStatusColor(
                     booking?.bookingStatus,
                   )}`}
                 >
@@ -152,6 +152,39 @@ function MyBookings() {
                   <p className="sm:col-span-2 break-words">
                     <strong>Address:</strong>{" "}
                     {booking?.patientId?.address?.fullAddress}
+                  </p>
+                </div>
+              </div>
+
+              {/* USER DETAILS */}
+              <div className="bg-blue-50 rounded-xl p-4 mb-4">
+                <h4 className="font-semibold mb-3 text-gray-700">
+                  Responsible User
+                </h4>
+
+                <div className="flex items-center gap-3 mb-3">
+                  {booking?.userId?.profilePicture ? (
+                    <img
+                      src={booking.userId.profilePicture}
+                      alt="user"
+                      referrerPolicy="no-referrer"
+                      className="w-12 h-12 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-gray-300 rounded-full" />
+                  )}
+
+                  <div>
+                    <p className="font-medium">
+                      {booking?.userId?.firstName} {booking?.userId?.lastName}
+                    </p>
+                    <p className="text-xs text-gray-500">Responsible Member</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                  <p>
+                    <strong>Mobile:</strong> {booking?.userId?.mobileNumber}
                   </p>
                 </div>
               </div>

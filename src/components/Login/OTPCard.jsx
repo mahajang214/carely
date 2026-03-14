@@ -114,17 +114,16 @@ const OTPCard = ({
           Enter the 6-digit code sent to your email
         </p>
 
-        <div className="flex justify-between gap-2 mb-6">
+        <div className="flex justify-between gap-2 mb-6" onPaste={handlePaste}>
           {otp.map((digit, index) => (
             <input
-              key={digit}
-              type="text"
+              key={index}
+              type="tel"
               value={digit}
               maxLength={1}
               ref={(el) => (inputsRef.current[index] = el)}
               onChange={(e) => handleChange(e.target.value, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
-              onPaste={handlePaste}
               className="w-12 h-14 text-center text-xl font-semibold border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
             />
           ))}

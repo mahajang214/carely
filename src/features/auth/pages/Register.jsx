@@ -55,9 +55,9 @@ const Register = () => {
   const [bloodGroup, setBloodGroup] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [allergies, setAllergies] = useState();
-  const [chronicConditions, setChronicConditions] = useState();
-  const [medicalNeeds, setMedicalNeeds] = useState();
+  const [allergies, setAllergies] = useState("");
+  const [chronicConditions, setChronicConditions] = useState("");
+  const [medicalNeeds, setMedicalNeeds] = useState("");
 
   const [continuePatientCreds, setContinuePatientCreds] = useState(false);
   const [searchUser, setSearchUser] = useState("");
@@ -332,7 +332,7 @@ const Register = () => {
 
       login(token, user);
       showToast("Patient registered successfully");
-      // navigate("/patient/dashboard");
+      navigate("/patient");
     } catch (error) {
       showToast("Failed to register patient");
     } finally {
@@ -618,7 +618,7 @@ const Register = () => {
               </div>
 
               {/* Editable Fields */}
-              
+
               <div className="grid grid-cols-2 gap-3">
                 <Input
                   placeholder="City"
@@ -768,32 +768,20 @@ const Register = () => {
               <Input
                 placeholder="Allergies (comma separated) (OPTIONAL)"
                 value={allergies}
-                onChange={(e) =>
-                  setAllergies(e.target.value.split(",").map((a) => a.trim()))
-                }
+                onChange={(e) => setAllergies(e.target.value)}
               />
 
               <Input
                 placeholder="Chronic Conditions (comma separated) (OPTIONAL)"
                 value={chronicConditions}
-                onChange={(e) =>
-                  setChronicConditions(
-                    e.target.value.split(",").map((c) => c.trim()),
-                  )
-                }
+                onChange={(e) => setChronicConditions(e.target.value)}
               />
 
               <Input
                 placeholder="Medical Needs (comma separated) (OPTIONAL)"
                 value={medicalNeeds}
-                onChange={(e) =>
-                  setMedicalNeeds(
-                    e.target.value.split(",").map((m) => m.trim()),
-                  )
-                }
+                onChange={(e) => setMedicalNeeds(e.target.value)}
               />
-              
-
             </>
           )}
 
@@ -968,11 +956,13 @@ const Register = () => {
                 </>
               )}
               {isOTPVerified == false && showOTPComponent && (
-                <OTPCard
-                  id={selectedUser._id}
-                  isOTPVerified={isOTPVerified}
-                  setIsOTPVerified={setIsOTPVerified}
-                />
+                <div className="w-full">
+                  <OTPCard
+                    id={selectedUser._id}
+                    isOTPVerified={isOTPVerified}
+                    setIsOTPVerified={setIsOTPVerified}
+                  />
+                </div>
               )}
             </>
           ) : null}

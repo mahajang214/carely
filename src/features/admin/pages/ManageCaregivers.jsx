@@ -141,6 +141,7 @@ function ManageCaregivers() {
                   <th className="px-4 py-3">City</th>
                   <th className="px-4 py-3">State</th>
                   <th className="px-4 py-3">Rating</th>
+                  <th className="px-4 py-3">Documents</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3 text-center">Actions</th>
                 </tr>
@@ -157,6 +158,7 @@ function ManageCaregivers() {
                             src={c.profilePicture}
                             alt="profile"
                             className="w-10 h-10 rounded-full mx-auto"
+                            referrerPolicy="no-referrer"
                           />
                         ) : (
                           <div className="w-10 h-10 bg-gray-300 rounded-full mx-auto" />
@@ -178,6 +180,26 @@ function ManageCaregivers() {
                       <td className="px-4 py-3 text-center">
                         {c.ratings.average?.toFixed(1) || 0} (
                         {c.ratings.totalReviews || 0})
+                      </td>
+
+                      <td className="px-4 py-3 text-center">
+                        {c.verificationDocuments?.length > 0 ? (
+                          <div className="flex flex-col gap-1">
+                            {c.verificationDocuments.map((doc, i) => (
+                              <a
+                                key={doc._id}
+                                href={doc.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline text-xs"
+                              >
+                                View Doc {i + 1}
+                              </a>
+                            ))}
+                          </div>
+                        ) : (
+                          "-"
+                        )}
                       </td>
 
                       <td className="px-4 py-3 text-center">
@@ -255,6 +277,7 @@ function ManageCaregivers() {
                         src={c.profilePicture}
                         alt="profile"
                         className="w-12 h-12 rounded-full"
+                        referrerPolicy="no-referrer"
                       />
                     ) : (
                       <div className="w-12 h-12 bg-gray-300 rounded-full" />
@@ -290,9 +313,33 @@ function ManageCaregivers() {
                 <div className="text-sm text-gray-600 space-y-1">
                   <p>Mobile: {c.mobileNumber || "-"}</p>
                   <p>
-                      {c.ratings.average?.toFixed(1) || 0} (
-                        {c.ratings.totalReviews || 0})
+                    {c.ratings.average?.toFixed(1) || 0} (
+                    {c.ratings.totalReviews || 0})
                   </p>
+                </div>
+
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p>Mobile: {c.mobileNumber || "-"}</p>
+                  <p>
+                    {c.ratings.average?.toFixed(1) || 0} (
+                    {c.ratings.totalReviews || 0})
+                  </p>
+
+                  {c.verificationDocuments?.length > 0 && (
+                    <div className="flex flex-col gap-1 mt-1">
+                      {c.verificationDocuments.map((doc, i) => (
+                        <a
+                          key={doc._id}
+                          href={doc.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 text-xs underline"
+                        >
+                          View Document {i + 1}
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Actions */}
