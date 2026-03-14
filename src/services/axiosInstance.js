@@ -3,7 +3,7 @@ import axios from "axios";
 /* -------------------- BASE URL -------------------- */
 
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_LOCAL_URL,
+    baseURL: import.meta.env.VITE_BACKEND_URL,
     withCredentials: true,
 });
 
