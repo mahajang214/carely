@@ -312,8 +312,8 @@ function MyBookings() {
               </div>
 
               {/* Cancle Booking */}
-              {booking?.bookingStatus != "completed" ||
-                (booking?.bookingStatus != "cancelled" && (
+              {booking?.bookingStatus === "accepted" ||
+                (booking?.bookingStatus === "in-progress" && (
                   <button
                     onClick={() => handleCancelBooking(booking._id)}
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition"
