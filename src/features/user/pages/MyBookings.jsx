@@ -93,7 +93,7 @@ function MyBookings() {
     }
   };
 
-  const handleCancel = async (id) => {
+  const handleCancelBooking = async (id) => {
     try {
       await userAPI.cancleBooking(id);
       showToast("Booking cancelled successfully");
@@ -371,6 +371,15 @@ function MyBookings() {
                     </div>
                   )}
                 </div>
+                {/* Cancle Booking */}
+                {booking?.bookingStatus === "pending" && (
+                  <button
+                    onClick={() => handleCancelBooking(booking._id)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition"
+                  >
+                    Cancel Service
+                  </button>
+                )}
 
                 {/* Review Section */}
                 {booking?.bookingStatus === "completed" &&
