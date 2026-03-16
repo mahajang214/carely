@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { caregiverAPI } from "../caregiverAPI";
 import { motion } from "framer-motion";
 import { ReceiptIndianRupeeIcon, ShieldCheck } from "lucide-react";
+import { useToast } from "../../../components/ui/ToastProvider";
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
@@ -16,6 +17,9 @@ function MyBookings() {
     "completed",
     "cancelled",
   ];
+
+  // toast
+  const { showToast } = useToast();
 
   useEffect(() => {
     fetchBookings();
@@ -46,6 +50,19 @@ function MyBookings() {
         (booking) => booking.bookingStatus === activeTab,
       );
       setFilteredBookings(filtered);
+    }
+  };
+  const handleCancelBooking = async (bookingId) => {
+    try {
+      const confirmCancel = window.confirm(
+        "Are you sure you want to cancel this service?",
+      );
+      if (!confirmCancel) return;
+      await caregiverAPI.cancleBookingRequest(bookingId);
+      // alert("Service cancelled successfully");
+      showToast("Service cancelled successfully");
+    } catch (error) {
+      console.error(error.message);
     }
   };
 
@@ -294,6 +311,16 @@ function MyBookings() {
                 </div>
               </div>
 
+              {/* Cancle Booking */}
+              {booking?.bookingStatus != "completed" ||
+                (booking?.bookingStatus != "cancelled" && (
+                  <button
+                    onClick={() => handleCancelBooking(booking._id)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition"
+                  >
+                    Cancel Service
+                  </button>
+                ))}
               {/* ACTION BUTTONS */}
               {booking?.bookingStatus === "accepted" && (
                 <button
